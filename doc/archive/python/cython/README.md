@@ -44,5 +44,9 @@ There are currently two different independent implementations which are variatio
 
 2. `cypd.pyx` -- **object-oriented api** (should check out the cpp version for comparison)
 
+The `portaudio` library is made available in the libpd repo via `pure-data` in `pure-data/portaudio`. A static library of `portaudio`, `libportaudio.a` is compiled as a dependency (see `libportaudio.mk`) and statically linked to the above cython extensions.
+
+This enables both implementation variants to generate sound from a pd patch without relying on an external dependency like`pyaudio` as is the case with the swig-based `pylibpd`.
+
 
 
