@@ -12,14 +12,18 @@ A Cython-based Python wrapper for [libpd](https://github.com/libpd/libpd) (Pure 
 
 ## Installation
 
-### Prerequisites
+```sh
+pip install cypd
+```
+
+## Build from source
+
+Prerequisites
 
 - Python 3.10+
 - [uv](https://github.com/astral-sh/uv) (recommended) or pip
 - CMake 3.15+
 - C compiler (clang/gcc)
-
-### Build from source
 
 ```bash
 # Clone the repository
