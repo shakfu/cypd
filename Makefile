@@ -17,38 +17,47 @@ $(LIBPD):
 
 # Sync environment (initial setup, installs dependencies + package)
 sync: $(LIBPD)
-	uv sync
+	@uv sync
 
 # Build/rebuild the extension after code changes
 build: $(LIBPD)
-	uv sync --reinstall-package cypd
+	@uv sync --reinstall-package cypd
 
 # Alias for build
 rebuild: build
 
 # Run tests
 test:
-	uv run pytest tests/ -v
+	@uv run pytest tests/ -v
 
 # Build wheel
 wheel:
-	uv build --wheel
+	@uv build --wheel
 
 # Build source distribution
 sdist:
-	uv build --sdist
+	@uv build --sdist
 
 # Check distribution with twine
 check:
-	uv run twine check dist/*
+	@uv run twine check dist/*
+
+# Create a multi-wheel release
+release:
+	@uv build --wheel --python 3.10
+	@uv build --wheel --python 3.11
+	@uv build --wheel --python 3.12
+	@uv build --wheel --python 3.13
+	@uv build --wheel --python 3.14
+	@uv run twine check dist/*
 
 # Publish to PyPI
 publish:
-	uv run twine upload dist/*
+	@uv run twine upload dist/*
 
 # Publish to TestPyPI
 publish-test:
-	uv run twine upload --repository testpypi dist/*
+	@uv run twine upload --repository testpypi dist/*
 
 # Clean build artifacts
 clean:
