@@ -1,0 +1,59 @@
+[project]
+name = "cypd"
+version = "0.1.0"
+description = "A Cython wrapper for libpd (Pure Data) with built-in audio support"
+requires-python = ">=3.9"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+authors = [
+    { name = "Shakeeb Alireza", email = "shakfu@users.noreply.github.com" }
+]
+keywords = [
+    "pure-data",
+    "libpd",
+    "audio",
+    "dsp",
+    "synthesis",
+    "music",
+    "cython",
+    "miniaudio",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Sound/Audio :: Sound Synthesis",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/shakfu/cypd"
+Repository = "https://github.com/shakfu/cypd"
+Issues = "https://github.com/shakfu/cypd/issues"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "twine>=6.0"]
+
+[build-system]
+requires = ["scikit-build-core", "cython"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+wheel.packages = ["src/cypd"]
+wheel.license-files = ["LICENSE"]
+wheel.exclude = ["*.pxd", "*.pyx"]
+build.verbose = false
+logging.level = "WARNING"
+
+[tool.scikit-build.cmake.define]
+CMAKE_BUILD_TYPE = "Release"

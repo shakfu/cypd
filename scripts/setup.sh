@@ -16,8 +16,7 @@
 CWD=$(pwd)
 BUILD=${CWD}/build
 THIRDPARTY=${CWD}/thirdparty
-LAST_WORKING="b6387"
-PD_VERSION=0.56-1
+PD_VERSION=0.56-2
 
 
 get_puredata() {
@@ -47,7 +46,7 @@ get_puredata() {
 
 remove_current() {
 	echo "remove current"
-	rm -rf ${BUILD} ${THIRDPARTY}
+	rm -rf ${BUILD} ${THIRDPARTY}/pure-data
 }
 
 
