@@ -39,7 +39,7 @@ get_puredata() {
 			--enable-libpd-extra \
 			--enable-portmidi \
 			&& \
-		make install && \
+		make install CFLAGS=-fPIC && \
 		cd ${CWD}
 }
 
