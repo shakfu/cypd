@@ -1,31 +1,68 @@
 cmake_minimum_required(VERSION 3.15...3.30)
 project(${SKBUILD_PROJECT_NAME} VERSION ${SKBUILD_PROJECT_VERSION} LANGUAGES C)
 
+include(ExternalProject)
+
 # Find Python
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 
 # ============================================================================
-# Paths
+# Configuration
 # ============================================================================
 
-# libpd
-set(LIBPD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/pure-data")
-set(LIBPD_INCLUDE_DIR "${LIBPD_ROOT}/include")
-set(LIBPD_LIB_DIR "${LIBPD_ROOT}/lib")
+set(PD_VERSION "0.56-2" CACHE STRING "Pure Data version to build")
 
-# miniaudio
+# Paths
+set(LIBPD_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/libpd-prefix")
+set(LIBPD_INCLUDE_DIR "${LIBPD_PREFIX}/include")
+set(LIBPD_LIB_DIR "${LIBPD_PREFIX}/lib")
+set(LIBPD_LIBRARY "${LIBPD_LIB_DIR}/libpd.a")
+
 set(MINIAUDIO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/miniaudio")
-
-# Cython sources
 set(CYPD_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/cypd")
 
 # ============================================================================
-# Check dependencies
+# Build libpd via ExternalProject
 # ============================================================================
 
-if(NOT EXISTS "${LIBPD_LIB_DIR}/libpd.a")
-    message(FATAL_ERROR "libpd not found. Run scripts/setup.sh first to build dependencies.")
-endif()
+# Create directories at configure time so CMake doesn't complain about
+# non-existent INTERFACE_INCLUDE_DIRECTORIES (ExternalProject runs at build time)
+file(MAKE_DIRECTORY "${LIBPD_INCLUDE_DIR}")
+file(MAKE_DIRECTORY "${LIBPD_INCLUDE_DIR}/pd")
+file(MAKE_DIRECTORY "${LIBPD_LIB_DIR}")
+
+ExternalProject_Add(libpd_external
+    GIT_REPOSITORY https://github.com/pure-data/pure-data.git
+    GIT_TAG ${PD_VERSION}
+    GIT_SHALLOW TRUE
+    PREFIX ${LIBPD_PREFIX}
+
+    CONFIGURE_COMMAND <SOURCE_DIR>/autogen.sh
+        COMMAND <SOURCE_DIR>/configure
+            --prefix=${LIBPD_PREFIX}
+            --enable-libpd
+            --enable-libpd-utils
+            --enable-libpd-extra
+            "CFLAGS=-fPIC"
+
+    BUILD_COMMAND make -j
+    INSTALL_COMMAND make install
+
+    BUILD_IN_SOURCE TRUE
+    BUILD_BYPRODUCTS ${LIBPD_LIBRARY}
+)
+
+# Create imported target for libpd
+add_library(libpd STATIC IMPORTED)
+set_target_properties(libpd PROPERTIES
+    IMPORTED_LOCATION ${LIBPD_LIBRARY}
+    INTERFACE_INCLUDE_DIRECTORIES "${LIBPD_INCLUDE_DIR};${LIBPD_INCLUDE_DIR}/pd"
+)
+add_dependencies(libpd libpd_external)
+
+# ============================================================================
+# Check miniaudio
+# ============================================================================
 
 if(NOT EXISTS "${MINIAUDIO_ROOT}/miniaudio.h")
     message(FATAL_ERROR "miniaudio.h not found in ${MINIAUDIO_ROOT}")
@@ -58,9 +95,7 @@ target_include_directories(_libpd PRIVATE
     ${LIBPD_INCLUDE_DIR}/pd
 )
 
-target_link_libraries(_libpd PRIVATE
-    "${LIBPD_LIB_DIR}/libpd.a"
-)
+target_link_libraries(_libpd PRIVATE libpd)
 
 # ============================================================================
 # _audio module (miniaudio backend)
@@ -123,6 +158,9 @@ target_include_directories(_audio PRIVATE
 target_link_libraries(_audio PRIVATE
     miniaudio_static
 )
+
+# _audio needs libpd headers, so add dependency
+add_dependencies(_audio libpd_external)
 
 # ============================================================================
 # Platform-specific linking

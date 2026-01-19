@@ -4,23 +4,18 @@
 # This Makefile wraps common build commands for convenience.
 # The actual build is handled by scikit-build-core via pyproject.toml
 
-.PHONY: all sync build rebuild test clean distclean wheel sdist check publish publish-test help reset
-
-LIBPD := thirdparty/pure-data/lib/libpd.a
+.PHONY: all sync build rebuild test clean distclean wheel sdist check \
+		publish publish-test help reset
 
 # Default target
 all: build
 
-# Install pure-data (with libpd)
-$(LIBPD):
-	@sh scripts/setup.sh
-
 # Sync environment (initial setup, installs dependencies + package)
-sync: $(LIBPD)
+sync:
 	@uv sync
 
 # Build/rebuild the extension after code changes
-build: $(LIBPD)
+build:
 	@uv sync --reinstall-package cypd
 
 # Alias for build

@@ -9,7 +9,7 @@ __pycache__/
 *.so
 
 # folders
-thirdparty/pure-data
+thirdparty/pure-data/
 
 # Distribution / packaging
 .Python
