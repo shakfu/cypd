@@ -85,6 +85,7 @@ add_custom_command(
 
 # Compile miniaudio.c as a static library
 add_library(miniaudio_static STATIC "${MINIAUDIO_ROOT}/miniaudio.c")
+set_target_properties(miniaudio_static PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(miniaudio_static PUBLIC "${MINIAUDIO_ROOT}")
 
 # Miniaudio needs certain defines and frameworks
