@@ -1,6 +1,6 @@
-# cypd: Cython wrapper for libpd
+# cypd: a cython wrapper for libpd
 
-A Cython-based Python wrapper for [libpd](https://github.com/libpd/libpd) (Pure Data as an embeddable audio library) with built-in audio support via [miniaudio](https://github.com/mackron/miniaudio).
+A cython-based Python wrapper for [libpd](https://github.com/libpd/libpd) (Pure Data as an embeddable audio library) with built-in audio support via [miniaudio](https://github.com/mackron/miniaudio).
 
 ## Features
 
@@ -8,7 +8,7 @@ A Cython-based Python wrapper for [libpd](https://github.com/libpd/libpd) (Pure 
 - **Built-in audio**: Integrated miniaudio backend for easy audio playback
 - **Flexible architecture**: Use the built-in audio or integrate your own audio system
 - **Thread-safe audio**: Audio processing runs in a separate thread with proper `nogil` handling
-- **Modern build system**: Uses scikit-build-core with CMake
+- **Modern build system**: using scikit-build-core with CMake
 
 ## Installation
 
@@ -29,9 +29,6 @@ Prerequisites
 # Clone the repository
 git clone https://github.com/shakfu/cypd.git
 cd cypd
-
-# Build libpd and miniaudio dependencies
-./scripts/setup.sh
 
 # Install with uv
 uv sync
