@@ -19,7 +19,7 @@ jobs:
         os: [ubuntu-latest, macos-14]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -32,7 +32,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: "yum install -y autoconf automake libtool alsa-lib-devel"
           CIBW_BEFORE_ALL_MACOS: "brew install autoconf automake libtool"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
@@ -51,7 +51,7 @@ jobs:
       - name: List artifacts
         run: ls -la dist/
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: all-dist
           path: dist/
