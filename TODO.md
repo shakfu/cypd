@@ -1,5 +1,10 @@
 # TODO
 
+## Critical
+
+## High
+
+## Medium
 
 - [ ] add memoryview array access
 - [ ] add embedded external example
@@ -7,3 +12,5 @@
 - [ ] add `release` to cypd
 - [ ] add multi-instance support
 - [ ] add multi-thread support
+
+## Low
